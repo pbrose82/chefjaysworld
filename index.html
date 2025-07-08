@@ -531,7 +531,6 @@
     
     function appData() {
         return {
-            // UI States
             loading: true,
             showLoginModal: false,
             showAdminPanel: false,
@@ -545,14 +544,10 @@
             isSubmittingStory: false,
             uploadingHeroImage: false,
             toasts: [],
-            
-            // Data
             products: [],
             stories: [],
             pendingStories: [],
             votedStoryIds: [],
-            
-            // Forms
             loginEmail: '',
             loginPassword: '',
             newProduct: { name: '', category: '', price: '', description: '', affiliateLink: '', image: null, imageFile: null },
@@ -579,6 +574,7 @@
                     await this.loadSettings();
                     
                 } catch (error) {
+                    console.error("Initialization error:", error)
                     this.showToast('Could not load site data.', 'error');
                 } finally {
                     this.loading = false;
@@ -625,23 +621,24 @@
                     console.error('Error loading products:', error);
                 }
             },
-
+            
             async loadStories() {
                 try {
+                    // Approved stories, sorted by newest first
                     const approvedSnapshot = await db.collection('stories')
                         .where('status', '==', 'approved')
-                        .orderBy('votes', 'desc')
-                        .orderBy('timestamp', 'desc')
+                        .orderBy('timestamp', 'desc') 
                         .get();
                     this.stories = approvedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     
+                    // Pending stories
                     const pendingSnapshot = await db.collection('stories')
                         .where('status', '==', 'pending')
                         .orderBy('timestamp', 'desc')
                         .get();
                     this.pendingStories = pendingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 } catch (error) {
-                    console.error('Error loading stories:', error);
+                    console.error('Error loading stories:', error); 
                 }
             },
             
@@ -668,17 +665,13 @@
             async handleHeroImageUpload(event) {
                 const file = event.target.files[0];
                 if (!file) return;
-
                 this.uploadingHeroImage = true;
-
                 try {
                     const storageRef = storage.ref('settings/heroImage');
                     const snapshot = await storageRef.put(file);
                     const url = await snapshot.ref.getDownloadURL();
-
                     this.settings.heroImageUrl = url;
                     await this.saveSettings();
-                    
                     this.showToast('Homepage image updated!', 'success');
                 } catch (error) {
                     console.error("Error uploading hero image:", error);
@@ -689,8 +682,8 @@
             },
             
             async addProduct() {
+                this.uploadingImage = true;
                 try {
-                    this.uploadingImage = true;
                     let imageUrl = null;
                     if (this.newProduct.imageFile) {
                         const filename = `products/${Date.now()}_${this.newProduct.imageFile.name}`;
@@ -716,8 +709,8 @@
             },
 
             async updateProduct() {
+                this.uploadingImage = true;
                 try {
-                    this.uploadingImage = true;
                     let imageUrl = this.editingProduct.image;
                     if (this.editingProduct.imageFile) {
                         const filename = `products/${Date.now()}_${this.editingProduct.imageFile.name}`;
@@ -808,8 +801,8 @@
                 try {
                     await db.collection('stories').doc(story.id).update({ status: 'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp() });
                     story.status = 'approved';
-                    this.stories.unshift(story);
                     this.pendingStories = this.pendingStories.filter(s => s.id !== story.id);
+                    await this.loadStories(); // Re-fetch all stories to ensure UI is consistent
                     this.showToast('Story approved!');
                 } catch (error) {
                     this.showToast('Failed to approve story: ' + error.message, 'error');
@@ -865,7 +858,7 @@
                     const storyRef = db.collection('stories').doc(story.id);
                     await db.runTransaction(async (transaction) => {
                         const doc = await transaction.get(storyRef);
-if (!doc.exists) throw "Document does not exist!";
+                        if (!doc.exists) throw "Document does not exist!";
                         const newVotes = (doc.data().votes || 0) + 1;
                         transaction.update(storyRef, { votes: newVotes });
                     });
