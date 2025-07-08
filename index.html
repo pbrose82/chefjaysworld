@@ -82,12 +82,12 @@
                             <input type="text" x-model="newProduct.name" placeholder="Product Name" class="w-full p-2 mb-3 border rounded" required>
                             <select x-model="newProduct.category" class="w-full p-2 mb-3 border rounded" required>
                                 <option value="">Select Category</option>
-                                <option value="pizza">Pizza Essentials</option>
                                 <option value="blackstone">Blackstone Products</option>
                                 <option value="clothing">Chef Clothing</option>
                             </select>
                             <input type="text" x-model="newProduct.price" placeholder="Price" class="w-full p-2 mb-3 border rounded" required>
                             <textarea x-model="newProduct.description" placeholder="Description" class="w-full p-2 mb-3 border rounded" rows="3" required></textarea>
+                            <input type="url" x-model="newProduct.affiliateLink" placeholder="Affiliate Link (for Blackstone)" class="w-full p-2 mb-3 border rounded">
                             <input type="file" @change="handleProductImage" class="w-full p-2 mb-3 border rounded" accept="image/*">
                             <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600">Add Product</button>
                         </form>
@@ -143,7 +143,6 @@
                     </div>
                     <div class="hidden md:flex items-center space-x-6">
                         <a href="#home" class="text-gray-700 hover:text-orange-600 transition">Home</a>
-                        <a href="#pizza" class="text-gray-700 hover:text-orange-600 transition">Pizza</a>
                         <a href="#blackstone" class="text-gray-700 hover:text-orange-600 transition">Blackstone</a>
                         <a href="#clothing" class="text-gray-700 hover:text-orange-600 transition">Clothing</a>
                         <a href="#stories" class="text-gray-700 hover:text-orange-600 transition">Stories</a>
@@ -164,10 +163,10 @@
         <header id="home" class="gradient-bg text-white">
             <div class="max-w-7xl mx-auto px-4 py-20 text-center">
                 <h1 class="text-5xl font-bold mb-4 fade-in">Chef Jay's Kitchen World</h1>
-                <p class="text-xl mb-8 max-w-2xl mx-auto fade-in">From Pizza Ovens to Griddles, Chef Clothing to Kitchen Stories - Your One-Stop Shop for Culinary Excellence</p>
+                <p class="text-xl mb-8 max-w-2xl mx-auto fade-in">Blackstone Griddles, Chef Clothing, and Kitchen Stories - Your Culinary Journey Starts Here</p>
                 <div class="flex flex-wrap justify-center gap-4 fade-in">
-                    <a href="#pizza" class="bg-white text-orange-600 px-8 py-3 rounded-full font-bold hover:bg-orange-100 transition transform hover:scale-105">Shop Pizza Essentials</a>
                     <a href="#blackstone" class="bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition transform hover:scale-105">Shop Blackstone</a>
+                    <a href="#clothing" class="bg-white text-orange-600 px-8 py-3 rounded-full font-bold hover:bg-orange-100 transition transform hover:scale-105">Shop Chef Clothing</a>
                 </div>
                 <div class="mt-6 text-sm bg-yellow-400 text-orange-800 p-2 rounded-full inline-block fade-in">
                     🎉 Use affiliate links for 10% off all products!
@@ -176,13 +175,270 @@
         </header>
 
         <!-- Products Sections -->
-        <section id="pizza" class="py-16">
+        <section id="blackstone" class="py-16 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4">
-                <h2 class="text-3xl font-bold text-center mb-4">Pizza Essentials</h2>
-                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Crafted by Chef Jay - Professional tools for creating restaurant-quality pizza at home</p>
+                <h2 class="text-3xl font-bold text-center mb-4">Blackstone Products</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Premium Blackstone griddles and accessories with exclusive 10% discount through our affiliate links</p>
                 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <template x-for="product in products.filter(p => p.category === 'pizza')" :key="product.id">
+                    <template x-for="product in products.filter(p => p.category === 'blackstone')" :key="product.id">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
+                            <div class="relative">
+                                <img :src="product.image || '/api/placeholder/400/300'" :alt="product.name" class="w-full h-48 object-cover">
+                                <span class="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">10% OFF</span>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold mb-2" x-text="product.name"></h3>
+                                <p class="text-gray-600 mb-4" x-text="product.description"></p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-lg font-bold text-orange-600" x-text="'
+
+        <!-- Story Submission Section -->
+        <section id="stories" class="py-16 bg-orange-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12">Share Your Kitchen Story</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Published Stories -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Latest Stories</h3>
+                        <div class="space-y-4 max-h-96 overflow-y-auto">
+                            <template x-for="story in stories" :key="story.id">
+                                <div class="border-b pb-4">
+                                    <h4 class="font-bold" x-text="story.name"></h4>
+                                    <p class="text-sm text-orange-600 mb-2" x-text="story.type"></p>
+                                    <p class="text-gray-600" x-text="story.story"></p>
+                                    <p class="text-xs text-gray-400 mt-2" x-text="new Date(story.timestamp).toLocaleDateString()"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Submission Form -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Submit Your Story</h3>
+                        <form @submit.prevent="submitStory()">
+                            <input type="text" x-model="storyForm.name" placeholder="Your Name" class="w-full p-2 mb-4 border rounded" required>
+                            <input type="email" x-model="storyForm.email" placeholder="Your Email" class="w-full p-2 mb-4 border rounded" required>
+                            <select x-model="storyForm.type" class="w-full p-2 mb-4 border rounded" required>
+                                <option value="">Select Type</option>
+                                <option value="Burn of the Day">Burn of the Day</option>
+                                <option value="Food Concept">Food Concept</option>
+                                <option value="Kitchen Story">Kitchen Story</option>
+                                <option value="Question">Question for Chef Jay</option>
+                            </select>
+                            <textarea x-model="storyForm.story" placeholder="Share your experience..." class="w-full p-2 mb-4 border rounded" rows="5" required></textarea>
+                            <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition">Submit Story</button>
+                        </form>
+                        <p x-show="storySubmitted" class="mt-4 text-green-600 text-center">Story submitted! It will appear after review.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center">
+                    <p>&copy; 2025 Chefjaysworld. All rights reserved.</p>
+                    <p class="text-sm mt-2">All affiliate links provide 10% discount to our customers.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Firebase (you'll need to add your config)
+        const firebaseConfig = {
+            // Add your Firebase config here
+            // Get this from Firebase Console > Project Settings
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Replace 'chefjay10' with your actual Blackstone affiliate code
+        const BLACKSTONE_AFFILIATE_CODE = 'chefjay10';
+
+        // Uncomment this when you have your Firebase config
+        // firebase.initializeApp(firebaseConfig);
+        // const auth = firebase.auth();
+        // const db = firebase.firestore();
+        // const storage = firebase.storage();
+
+        function appData() {
+            return {
+                showLoginModal: false,
+                showAdminPanel: false,
+                isAdmin: false,
+                loginEmail: '',
+                loginPassword: '',
+                products: [
+                    // Sample products - these will come from Firebase
+                    { 
+                        id: 1, 
+                        name: '36" Blackstone Griddle', 
+                        category: 'blackstone', 
+                        price: '499.99', 
+                        description: 'Professional outdoor cooking station with 4 burners',
+                        affiliateLink: 'https://blackstone.com/griddle-36?ref=chefjay10'
+                    },
+                    { 
+                        id: 2, 
+                        name: 'Blackstone Tool Kit', 
+                        category: 'blackstone', 
+                        price: '89.99', 
+                        description: 'Complete set of professional-grade griddle tools',
+                        affiliateLink: 'https://blackstone.com/toolkit?ref=chefjay10'
+                    },
+                    { 
+                        id: 3, 
+                        name: 'Premium Chef Coat', 
+                        category: 'clothing', 
+                        price: '79.99', 
+                        description: 'Professional-grade, breathable cotton chef jacket' 
+                    }
+                ],
+                stories: [],
+                pendingStories: [],
+                newProduct: {
+                    name: '',
+                    category: '',
+                    price: '',
+                    description: '',
+                    affiliateLink: '',
+                    image: null
+                },
+                storyForm: {
+                    name: '',
+                    email: '',
+                    type: '',
+                    story: ''
+                },
+                storySubmitted: false,
+
+                // Authentication
+                async login() {
+                    try {
+                        // Firebase auth would go here
+                        // const result = await auth.signInWithEmailAndPassword(this.loginEmail, this.loginPassword);
+                        
+                        // For demo purposes
+                        if (this.loginEmail === 'admin@chefjaysworld.com' && this.loginPassword === 'admin123') {
+                            this.isAdmin = true;
+                            this.showLoginModal = false;
+                            this.loginEmail = '';
+                            this.loginPassword = '';
+                            alert('Logged in successfully!');
+                        } else {
+                            alert('Invalid credentials');
+                        }
+                    } catch (error) {
+                        alert('Login failed: ' + error.message);
+                    }
+                },
+
+                // Product Management
+                async addProduct() {
+                    try {
+                        const product = {
+                            ...this.newProduct,
+                            id: Date.now(),
+                            timestamp: new Date().toISOString()
+                        };
+                        
+                        // Would save to Firebase here
+                        // await db.collection('products').add(product);
+                        
+                        this.products.push(product);
+                        this.newProduct = { name: '', category: '', price: '', description: '', affiliateLink: '', image: null };
+                        alert('Product added successfully!');
+                    } catch (error) {
+                        alert('Failed to add product: ' + error.message);
+                    }
+                },
+
+                handleProductImage(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        // Would upload to Firebase Storage here
+                        this.newProduct.image = URL.createObjectURL(file);
+                    }
+                },
+
+                // Story Management
+                async submitStory() {
+                    try {
+                        const story = {
+                            ...this.storyForm,
+                            id: Date.now(),
+                            timestamp: new Date().toISOString(),
+                            status: 'pending'
+                        };
+                        
+                        // Would save to Firebase here
+                        // await db.collection('stories').add(story);
+                        
+                        this.pendingStories.push(story);
+                        this.storyForm = { name: '', email: '', type: '', story: '' };
+                        this.storySubmitted = true;
+                        setTimeout(() => this.storySubmitted = false, 3000);
+                    } catch (error) {
+                        alert('Failed to submit story: ' + error.message);
+                    }
+                },
+
+                async approveStory(story) {
+                    try {
+                        story.status = 'approved';
+                        // Would update in Firebase here
+                        // await db.collection('stories').doc(story.id).update({ status: 'approved' });
+                        
+                        this.stories.push(story);
+                        this.pendingStories = this.pendingStories.filter(s => s.id !== story.id);
+                        alert('Story approved!');
+                    } catch (error) {
+                        alert('Failed to approve story: ' + error.message);
+                    }
+                },
+
+                async rejectStory(storyId) {
+                    try {
+                        // Would delete from Firebase here
+                        // await db.collection('stories').doc(storyId).delete();
+                        
+                        this.pendingStories = this.pendingStories.filter(s => s.id !== storyId);
+                        alert('Story rejected');
+                    } catch (error) {
+                        alert('Failed to reject story: ' + error.message);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html> + product.price"></span>
+                                    <a :href="product.affiliateLink || '#'" target="_blank" class="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition">
+                                        Shop Now →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <section id="clothing" class="py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-4">Chef Clothing</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Professional chef apparel for comfort and style in the kitchen</p>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <template x-for="product in products.filter(p => p.category === 'clothing')" :key="product.id">
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover">
                             <div class="relative">
                                 <img :src="product.image || '/api/placeholder/400/300'" :alt="product.name" class="w-full h-48 object-cover">
@@ -192,7 +448,212 @@
                                 <h3 class="text-xl font-bold mb-2" x-text="product.name"></h3>
                                 <p class="text-gray-600 mb-4" x-text="product.description"></p>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-lg font-bold text-orange-600" x-text="'$' + product.price"></span>
+                                    <span class="text-lg font-bold text-orange-600" x-text="'
+
+        <!-- Story Submission Section -->
+        <section id="stories" class="py-16 bg-orange-50">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12">Share Your Kitchen Story</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Published Stories -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Latest Stories</h3>
+                        <div class="space-y-4 max-h-96 overflow-y-auto">
+                            <template x-for="story in stories" :key="story.id">
+                                <div class="border-b pb-4">
+                                    <h4 class="font-bold" x-text="story.name"></h4>
+                                    <p class="text-sm text-orange-600 mb-2" x-text="story.type"></p>
+                                    <p class="text-gray-600" x-text="story.story"></p>
+                                    <p class="text-xs text-gray-400 mt-2" x-text="new Date(story.timestamp).toLocaleDateString()"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Submission Form -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold mb-4">Submit Your Story</h3>
+                        <form @submit.prevent="submitStory()">
+                            <input type="text" x-model="storyForm.name" placeholder="Your Name" class="w-full p-2 mb-4 border rounded" required>
+                            <input type="email" x-model="storyForm.email" placeholder="Your Email" class="w-full p-2 mb-4 border rounded" required>
+                            <select x-model="storyForm.type" class="w-full p-2 mb-4 border rounded" required>
+                                <option value="">Select Type</option>
+                                <option value="Burn of the Day">Burn of the Day</option>
+                                <option value="Food Concept">Food Concept</option>
+                                <option value="Kitchen Story">Kitchen Story</option>
+                                <option value="Question">Question for Chef Jay</option>
+                            </select>
+                            <textarea x-model="storyForm.story" placeholder="Share your experience..." class="w-full p-2 mb-4 border rounded" rows="5" required></textarea>
+                            <button type="submit" class="w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition">Submit Story</button>
+                        </form>
+                        <p x-show="storySubmitted" class="mt-4 text-green-600 text-center">Story submitted! It will appear after review.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center">
+                    <p>&copy; 2025 Chefjaysworld. All rights reserved.</p>
+                    <p class="text-sm mt-2">All affiliate links provide 10% discount to our customers.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Firebase (you'll need to add your config)
+        const firebaseConfig = {
+            // Add your Firebase config here
+            // Get this from Firebase Console > Project Settings
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Uncomment this when you have your Firebase config
+        // firebase.initializeApp(firebaseConfig);
+        // const auth = firebase.auth();
+        // const db = firebase.firestore();
+        // const storage = firebase.storage();
+
+        function appData() {
+            return {
+                showLoginModal: false,
+                showAdminPanel: false,
+                isAdmin: false,
+                loginEmail: '',
+                loginPassword: '',
+                products: [
+                    // Sample products - these will come from Firebase
+                    { id: 1, name: 'Pro Pizza Oven', category: 'pizza', price: '599.99', description: 'Professional-grade pizza oven for home chefs' },
+                    { id: 2, name: 'Artisan Dough Mix', category: 'pizza', price: '14.99', description: 'Chef Jay\'s secret blend' },
+                    { id: 3, name: '36" Blackstone Griddle', category: 'blackstone', price: '499.99', description: 'Professional outdoor cooking station' }
+                ],
+                stories: [],
+                pendingStories: [],
+                newProduct: {
+                    name: '',
+                    category: '',
+                    price: '',
+                    description: '',
+                    image: null
+                },
+                storyForm: {
+                    name: '',
+                    email: '',
+                    type: '',
+                    story: ''
+                },
+                storySubmitted: false,
+
+                // Authentication
+                async login() {
+                    try {
+                        // Firebase auth would go here
+                        // const result = await auth.signInWithEmailAndPassword(this.loginEmail, this.loginPassword);
+                        
+                        // For demo purposes
+                        if (this.loginEmail === 'admin@chefjaysworld.com' && this.loginPassword === 'admin123') {
+                            this.isAdmin = true;
+                            this.showLoginModal = false;
+                            this.loginEmail = '';
+                            this.loginPassword = '';
+                            alert('Logged in successfully!');
+                        } else {
+                            alert('Invalid credentials');
+                        }
+                    } catch (error) {
+                        alert('Login failed: ' + error.message);
+                    }
+                },
+
+                // Product Management
+                async addProduct() {
+                    try {
+                        const product = {
+                            ...this.newProduct,
+                            id: Date.now(),
+                            timestamp: new Date().toISOString()
+                        };
+                        
+                        // Would save to Firebase here
+                        // await db.collection('products').add(product);
+                        
+                        this.products.push(product);
+                        this.newProduct = { name: '', category: '', price: '', description: '', image: null };
+                        alert('Product added successfully!');
+                    } catch (error) {
+                        alert('Failed to add product: ' + error.message);
+                    }
+                },
+
+                handleProductImage(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        // Would upload to Firebase Storage here
+                        this.newProduct.image = URL.createObjectURL(file);
+                    }
+                },
+
+                // Story Management
+                async submitStory() {
+                    try {
+                        const story = {
+                            ...this.storyForm,
+                            id: Date.now(),
+                            timestamp: new Date().toISOString(),
+                            status: 'pending'
+                        };
+                        
+                        // Would save to Firebase here
+                        // await db.collection('stories').add(story);
+                        
+                        this.pendingStories.push(story);
+                        this.storyForm = { name: '', email: '', type: '', story: '' };
+                        this.storySubmitted = true;
+                        setTimeout(() => this.storySubmitted = false, 3000);
+                    } catch (error) {
+                        alert('Failed to submit story: ' + error.message);
+                    }
+                },
+
+                async approveStory(story) {
+                    try {
+                        story.status = 'approved';
+                        // Would update in Firebase here
+                        // await db.collection('stories').doc(story.id).update({ status: 'approved' });
+                        
+                        this.stories.push(story);
+                        this.pendingStories = this.pendingStories.filter(s => s.id !== story.id);
+                        alert('Story approved!');
+                    } catch (error) {
+                        alert('Failed to approve story: ' + error.message);
+                    }
+                },
+
+                async rejectStory(storyId) {
+                    try {
+                        // Would delete from Firebase here
+                        // await db.collection('stories').doc(storyId).delete();
+                        
+                        this.pendingStories = this.pendingStories.filter(s => s.id !== storyId);
+                        alert('Story rejected');
+                    } catch (error) {
+                        alert('Failed to reject story: ' + error.message);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html> + product.price"></span>
                                     <button class="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition">Add to Cart</button>
                                 </div>
                             </div>
