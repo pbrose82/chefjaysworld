@@ -366,15 +366,17 @@
 </div>
 </div>
 </nav>
-<header class="gradient-bg text-white" id="home">
-<div class="max-w-7xl mx-auto px-4 py-20 text-center">
-<h1 class="text-4xl md:text-5xl font-bold mb-4 fade-in" x-text="settings.siteTitle || 'Welcome to Chef Jay\'s Kitchen World'"></h1>
-<p class="text-xl mb-8 max-w-2xl mx-auto fade-in" x-text="settings.welcomeMessage || 'Discover premium Blackstone griddles, professional chef apparel, and share your kitchen stories with our community'"></p>
-<div class="flex flex-wrap justify-center gap-4 fade-in">
-<a class="bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition transform hover:scale-105" href="#blackstone">Shop Blackstone</a>
-<a class="bg-white text-orange-600 px-8 py-3 rounded-full font-bold hover:bg-orange-100 transition transform hover:scale-105" href="#stories">Share Your Story</a>
-</div>
-</div>
+<header class="text-white relative" id="home" style="background-image: url('https://images.unsplash.com/photo-1556911220-e15b29be8c9f?auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 py-20 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 fade-in" x-text="settings.siteTitle || 'Welcome to Chef Jay\'s Kitchen World'"></h1>
+        <p class="text-xl mb-8 max-w-2xl mx-auto fade-in" x-text="settings.welcomeMessage || 'Discover premium Blackstone griddles, professional chef apparel, and share your kitchen stories with our community'"></p>
+        <div class="flex flex-wrap justify-center gap-4 fade-in">
+            <a class="bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition transform hover:scale-105" href="#blackstone">Shop Blackstone</a>
+            <a class="bg-white text-orange-600 px-8 py-3 rounded-full font-bold hover:bg-orange-100 transition transform hover:scale-105" href="#stories">Share Your Story</a>
+        </div>
+    </div>
 </header>
 <section class="py-16 bg-gray-900 text-white relative bg-cover bg-center" id="blackstone" style="background-image: url('https://images.unsplash.com/photo-1601315576604-2f9b54d16f5c?auto=format&amp;fit=crop&amp;w=1470&amp;q=80');">
 <div class="max-w-7xl mx-auto px-4">
